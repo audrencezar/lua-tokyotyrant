@@ -1,0 +1,22 @@
+
+
+tokyotyrant.lua
+
+Depends on
+  - nixio  (for sockets and bitwise operations)
+  - Roberto Ierusalimschy's struct module
+  - A tokyotyrant server to connect to
+( Batteries not included )
+
+Simple Usage Example
+  > tyr = require'tokyotyrant'
+  > rdb = tyr.RDB()
+  > rdb:open(host, port)  --defaults to 'localhost' and '1978'
+  > rdb.foo = 'foo!'  --does put command
+  > =rdb.foo        --does get command
+  foo!
+
+Implements all features of Mikio Hirabayashi's tokyocabinet.rb.
+
+All your database are belong to Mikio.
+
