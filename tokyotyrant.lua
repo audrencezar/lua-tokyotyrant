@@ -379,7 +379,7 @@ function RDB:fwmkeys(prefix, max)
     if ksiz < 0 then return {}, self.ERECV end
     kbuf = self.sock:readall(ksiz)
     if not kbuf then return {}, self.ERECV end
-    table.insert(keys, kbuf)
+    keys[#keys+1] = kbuf
   end
   return keys
 end
@@ -580,7 +580,7 @@ function RDB:misc(name, args, opts)
     if esiz < 0 then return nil, self.ERECV end
     ebuf = self.sock:readall(esiz)
     if not ebuf then return nil, self.ERECV end
-    table.insert(res, ebuf)
+    res[#res+1] = ebuf
   end
   return res
 end
@@ -663,7 +663,7 @@ end
 --@return  table
 function RDB.values()
   local tvals = {}
-  for v in self:each_values() do table.insert(v) end
+  for v in self:each_values() do tvals[#tvals+1] = v end
   return tvals
 end
 
@@ -703,8 +703,8 @@ function RDBTBL:put(pkey, cols)
   if type(cols) ~= 'table' then error("'cols' must be a table of columns") end
   local args = {}
   for k,v in cols do
-    table.insert(k)
-    table.insert(v)
+    args[#args+1] = k
+    args[#args+1] = v
   end
   local res, err = self:misc("put", args, 0)
   if not res then return false, err
@@ -720,8 +720,8 @@ function RDBTBL:putkeep(pkey, cols)
   if type(cols) ~= 'table' then error("'cols' must be a table of columns") end
   local args = {}
   for k,v in cols do
-    table.insert(k)
-    table.insert(v)
+    args[#args+1] = k
+    args[#args+1] = v
   end
   local res, err = self:misc("putkeep", args, 0)
   if not res then return false, self.EKEEP
@@ -737,8 +737,8 @@ function RDBTBL:putcat(pkey, cols)
   if type(cols) ~= 'table' then error("'cols' must be a table of columns") end
   local args = {}
   for k,v in cols do
-    table.insert(k)
-    table.insert(v)
+    args[#args+1] = k
+    args[#args+1] = v
   end
   local res, err = self:misc('putcat', args, 0)
   if not res then return false, err
@@ -890,7 +890,7 @@ setmetatable(RDBQRY, {__call = RDBQRY.new})
 --@expr  specifies an operand expression
 --@return  nil
 function RDBQRY:addcond(name, op, expr)
-  table.insert(self.args, 'addcond'..'\0'..name..'\0'..tostring(op)..'\0'..expr)
+  self.args[#self.args+1]= 'addcond'..'\0'..name..'\0'..tostring(op)..'\0'..expr)
   return nil
 end
 
@@ -903,7 +903,7 @@ end
 --QONUMDESC = 3,--number descending
 --@return  nil
 function RDBQRY:setorder(name, otype)
-  table.insert(self.args, 'setorder'..'\0'..name..'\0'..tostring(otype))
+  self.args[#self.args+1] = 'setorder'..'\0'..name..'\0'..tostring(otype))
   return nil
 end
 
@@ -929,7 +929,7 @@ end
 ---remove each corresponding record
 --@return true or false, error message
 function RDBQRY:searchout()
-  table.insert(self.args, 'out')
+  self.args[#self.args+1] = 'out'
   local i = #self.args
   local res, err = self.rdb:misc('search', args, 0)
   table.remove(self.args, i)
