@@ -36,8 +36,6 @@ local nio = require 'nixio', require 'nixio.util'
 local shl, shr = nio.bit.lshift, nio.bit.rshift
 
 local function module(name) end --trick luadoc
-
----lua-tokyotyrant
 module 'tokyotyrant'
 
 --
@@ -890,7 +888,7 @@ setmetatable(RDBQRY, {__call = RDBQRY.new})
 --@expr  specifies an operand expression
 --@return  nil
 function RDBQRY:addcond(name, op, expr)
-  self.args[#self.args+1]= 'addcond'..'\0'..name..'\0'..tostring(op)..'\0'..expr)
+  self.args[#self.args+1]= 'addcond'..'\0'..name..'\0'..tostring(op)..'\0'..expr
   return nil
 end
 
@@ -903,7 +901,7 @@ end
 --QONUMDESC = 3,--number descending
 --@return  nil
 function RDBQRY:setorder(name, otype)
-  self.args[#self.args+1] = 'setorder'..'\0'..name..'\0'..tostring(otype))
+  self.args[#self.args+1] = 'setorder'..'\0'..name..'\0'..tostring(otype)
   return nil
 end
 
