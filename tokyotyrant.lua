@@ -88,9 +88,8 @@ local RDB = { MAGIC = 0xC8, --a little can go a long way
                 elseif code == 111 then return self.EREFUSED end
               end,
 
-              _recvcode = function(self)
-                local code = self.sock:recv(1)
-                return struct.unpack('>B', code) or -1
+              _recvuchar = function(self)
+                return struct.unpack('>B', self.sock:recv(1)) or -1
               end,
 
              _recvint32 = function(self)
@@ -98,20 +97,14 @@ local RDB = { MAGIC = 0xC8, --a little can go a long way
              end,
 
              _recvint64 = function(self)
-             --please let me know if you have a better solution
-               local num = 0
-               for i=1, 7 do
-                 num = (num + self.sock:read(1):byte()) * 256
-               end
-               num = num + ( self.sock:read(1):byte() )
-               return num or -1
+               return struct.unpack('>i8', self.sock:readall(8)) or -1
              end,
 
              _packquad = function(self, num)
-             --please let me know if you have a better solution
+               --please let me know if you have a better solution
                local high = math.floor( num / (shl(1, 32)) )
                local low = math.fmod( num, (shl(1, 32)) )
-               return struct.pack('>i4i4', high, low)
+               return struct.pack('>i8i8', high, low)
              end,
             } 
 
