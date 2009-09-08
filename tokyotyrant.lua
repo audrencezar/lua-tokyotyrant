@@ -498,6 +498,9 @@ function RDB:copy(path)
   return true
 end
 
+-- TODO: Missing protocol function "restore" for the function `tcrdbrestore'
+-- TODO: Missing protocol function "setmst" for the function `tcrdbsetmst'
+
 ---get number of records
 --( limited to Lua's number type precision )
 --@return  record number or 0, error message
